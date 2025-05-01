@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Wallet - Scanning Documents</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      color: #1d1d1f;
+    }
+    header {
+      background-color: #112a46;
+      color: white;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    .logo img {
+      height: 32px;
+      margin-right: 10px;
+    }
+    .menu-icon {
+      cursor: pointer;
+      font-size: 24px;
+    }
+    .slide-menu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      height: 100%;
+      width: 50%;
+      background-color: #fff;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      transition: left 0.3s ease;
+      z-index: 999;
+    }
+    .slide-menu.active {
+      left: 0;
+    }
+    .slide-menu a {
+      display: block;
+      margin: 15px 0;
+      text-decoration: none;
+      color: #112a46;
+      font-weight: 600;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.3);
+      z-index: 998;
+    }
+    .overlay.active {
+      display: block;
+    }
+    .content {
+      padding: 40px 20px;
+      max-width: 700px;
+      margin: auto;
+      text-align: center;
+    }
+    .doc-box {
+      width: 180px;
+      height: 180px;
+      margin: 20px auto;
+      border-radius: 50%;
+      border: 4px solid #0071e3;
+      position: relative;
+      overflow: hidden;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .doc-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .scan-line {
+      position: absolute;
+      height: 4px;
+      width: 100%;
+      background: #0071e3;
+      animation: scan 2s linear infinite;
+    }
+    @keyframes scan {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+    .loading-text {
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    .dots::after {
+      content: '';
+      animation: dots 1s steps(4, end) infinite;
+    }
+    @keyframes dots {
+      0% { content: ''; }
+      25% { content: '.'; }
+      50% { content: '..'; }
+      75% { content: '...'; }
+      100% { content: '....'; }
+    }
+    .btn {
+      display: none;
+      margin-top: 30px;
+      padding: 14px 28px;
+      font-size: 16px;
+      background-color: #0071e3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .details-box {
+      display: none;
+      margin-top: 30px;
+      text-align: left;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    footer {
+      background-color: #112a46;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+    }
+    .scan-complete {
+      display: none;
+      font-size: 20px;
+      margin-top: 20px;
+      color: green;
+      font-weight: bold;
+    }
+    #continueBtn {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .home-btn {
+      display: block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #0071e3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      text-align: center;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="ftc wallet.jpeg" alt="MACS Logo" /> Secure Wallet</div>
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+  </header>
+  <div class="slide-menu" id="slideMenu">
+    <a href="page-2.html">Create an Account</a>
+    <a href="page-2.html">Log In</a>
+    <a href="#">Support</a>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <div class="content">
+    <div class="doc-box" id="doc1">
+      <img src="uploaded-doc1.jpg" alt="Document 1">
+      <div class="scan-line" id="line1"></div>
+    </div>
+    <div class="doc-box" id="doc2">
+      <img src="uploaded-doc2.jpg" alt="Document 2">
+      <div class="scan-line" id="line2"></div>
+    </div>
+    <div class="loading-text" id="loadingText">Scanning Documents<span class="dots"></span></div>
+    <div class="scan-complete" id="scanComplete">Scan Completed</div>
+    <button class="btn" id="generateBtn" onclick="startGeneration()">Generate Secure Wallet Account Number</button>
+    <div class="loading-text" id="genText" style="display:none;">Generating...</div>
+    <div class="loading-text" id="genDone" style="display:none;">
+      Generated Account Number: <b>118767870098</b><br>
+      <button id="continueBtn" onclick="showDetails()">Continue</button>
+    </div>
+    <div class="details-box" id="finalDetails">
+      <p><b>Name:</b> <span id="nameField"></span></p>
+      <p><b>Username:</b> <span id="userField"></span></p>
+      <p><b>Email:</b> <span id="emailField"></span></p>
+      <p><b>Phone:</b> <span id="phoneField"></span></p>
+      <p><b>SSN:</b> <span id="ssnField"></span></p>
+      <p><b>PIN:</b> <span id="pinField"></span></p>
+      <p><b>Account Number:</b> 118767870098</p>
+      <p><b>Routing Number:</b> 88801908</p>
+      <p style="margin-top:20px;color:green;font-weight:bold;">Account successfully created. You can login back in next 24 hours.</p>
+      <button class="home-btn" onclick="window.location.href='https://www.google.com'">Go to Homepage</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 MACS Corporation. All rights reserved.
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('slideMenu').classList.toggle('active');
+      document.getElementById('overlay').classList.toggle('active');
+    }
+
+    setTimeout(() => {
+      document.getElementById('loadingText').style.display = 'none';
+      document.getElementById('line1').style.display = 'none';
+      document.getElementById('line2').style.display = 'none';
+      document.getElementById('scanComplete').style.display = 'block';
+      document.getElementById('generateBtn').style.display = 'inline-block';
+    }, 45000);
+
+    function startGeneration() {
+      document.getElementById('generateBtn').style.display = 'none';
+      document.getElementById('genText').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('genText').style.display = 'none';
+        document.getElementById('genDone').style.display = 'block';
+      }, 10000);
+    }
+
+    function showDetails() {
+      document.getElementById('genDone').style.display = 'none';
+      document.getElementById('finalDetails').style.display = 'block';
+
+      // Retrieve user data from localStorage
+      document.getElementById('nameField').innerText = localStorage.getItem('name') || 'N/A';
+      document.getElementById('userField').innerText = localStorage.getItem('username') || 'N/A';
+      document.getElementById('emailField').innerText = localStorage.getItem('email') || 'N/A';
+      document.getElementById('phoneField').innerText = localStorage.getItem('phone') || 'N/A';
+      document.getElementById('ssnField').innerText = localStorage.getItem('ssn') || 'N/A';
+      document.getElementById('pinField').innerText = localStorage.getItem('pin') || 'N/A';
+    }
+  </script>
+</body>
+</html>
