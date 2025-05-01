@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Secure Wallet - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      color: #1d1d1f;
+    }
+    header {
+      background-color: #112a46;
+      color: white;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+    .logo img {
+      height: 32px;
+      margin-right: 10px;
+    }
+    .menu-icon {
+      cursor: pointer;
+      font-size: 24px;
+    }
+    .slide-menu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      height: 100%;
+      width: 50%;
+      background-color: #fff;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      transition: left 0.3s ease;
+      z-index: 999;
+    }
+    .slide-menu.active {
+      left: 0;
+    }
+    .slide-menu a {
+      display: block;
+      margin: 15px 0;
+      text-decoration: none;
+      color: #112a46;
+      font-weight: 600;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.3);
+      z-index: 998;
+    }
+    .overlay.active {
+      display: block;
+    }
+    .content {
+      padding: 40px 20px;
+      max-width: 700px;
+      margin: auto;
+      text-align: center;
+    }
+    .get-started-btn {
+      margin-top: 30px;
+      padding: 14px 28px;
+      font-size: 16px;
+      background-color: #0071e3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .benefits {
+      margin-top: 40px;
+      text-align: left;
+    }
+    .benefits h2 {
+      margin-bottom: 10px;
+    }
+    .benefits ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+    footer {
+      background-color: #112a46;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="ftc wallet.jpeg" alt="MACS Logo" />
+
+      Secure Wallet
+    </div>
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+  </header>
+
+  <div class="slide-menu" id="slideMenu">
+    <a href="page-2.html">Create an Account</a>
+    <a href="page-2.html">Log In</a>
+    <a href="#">Support</a>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <div class="content">
+    <h1>Welcome to MACS Wallet</h1>
+    <p>MACS Wallet is your all-in-one digital banking solution designed for iOS. Experience smooth transactions, secure savings, and smart finance tools—all in one place. Stay connected to your money, anytime, anywhere.</p>
+
+    <button class="get-started-btn" onclick="window.location.href='page-2.html'">
+      Get Started with FTC Secure Wallet
+    </button>
+
+    <div class="benefits">
+      <h2>Benefits of MACS Wallet</h2>
+      <ul>
+        <li>Attractive Interest Rate: Earn up to 8% annually</li>
+        <li>Secure Cloud-based Vault for all your transactions</li>
+        <li>24x7 Customer Support with AI assistant</li>
+        <li>Instant Fund Transfers with zero fees</li>
+        <li>Multi-layer Encryption & Biometric Login</li>
+        <li>Real-time Alerts and Expense Tracking</li>
+        <li>Easy Bill Payments & Scheduled Transfers</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 MACS Corporation. All rights reserved.
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('slideMenu').classList.toggle('active');
+      document.getElementById('overlay').classList.toggle('active');
+    }
+  </script>
+</body>
+</html>
